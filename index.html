@@ -87,7 +87,25 @@
     </section>
   </main>
 
+
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+
+  
   <script>
+
+  window.TrackJS && TrackJS.install({ 
+      token: "9b353ace1b22495e936d06accd7f1e95"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+    class InvalidInputError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = 'InvalidInputError';
+      }
+    }
+
+
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -98,10 +116,114 @@
       output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
     });
 
+    try {
+    // Declare and assign the output variable here
+    output = document.querySelector('output');
+
+    // Check if the inputs are valid numbers
+    if (isNaN(firstNum) || isNaN(secondNum)) {
+      throw new InvalidInputError('Please enter valid numbers');
+    }
+
+    // Perform the calculation
+    let result = eval(`${firstNum} ${operator} ${secondNum}`);
+
+    // Output the result
+    output.innerHTML = result;
+  } catch (error) {
+    // Handle the error
+    if (error instanceof InvalidInputError) {
+      output.innerHTML = `Error: ${error.message}`;
+    } else {
+      output.innerHTML = 'An unexpected error occurred';
+      console.error(error);
+    }
+  } finally {
+    // Clean up or perform any additional tasks
+    console.log('Calculation complete');
+  }
+    
+
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
     // Start your code here
     // You may move this JS to another file if you wish
+    errorBtns.forEach((btn, index) => {
+      btn.addEventListener('click', () => {
+        switch (index) {
+          case 0:
+            console.log('This is a log message');
+            break;
+          case 1:
+            console.error('This is a error message');
+            break;
+          case 2:
+            console.count('This message has been logged: ');
+            break;
+          case 3:
+            console.warn('This is a warn message');
+            break;
+          case 4:
+            console.assert(false, 'This is a true assertion');
+            break;
+          case 5:
+            console.clear();
+            break;
+          case 6:
+            const robotArm = {
+              name: 'Latency',
+              motorCount: 6
+            };
+          console.dir(robotArm);
+          break;
+          case 7:
+            const list = document.createElement('ul');
+            list.innerHTML = '<li>Item 1</li><li>Item 2</li><li>Item 3</li>';
+            console.dirxml(list);
+            break;
+          case 8:
+            console.group('g1');
+            console.log('in g1');
+            console.group('g2');
+            console.log('in g2');
+            break;
+          case 9:
+            console.groupEnd();
+            console.groupEnd();
+            break;
+          case 10:
+            const table = [
+            {  name: 'dog', age: 20 },
+            {  name: 'joe', age: 20 }
+            ];
+            console.table(table);
+            break;
+          case 11:
+            console.time('Timer');
+            console.log('Timer started');
+            break;
+        case 12:
+            console.timeEnd('Timer');
+            console.log('Timer stopped');
+            break;
+          case 13:
+            function trace() {
+              console.trace('trace');
+            }
+            trace();
+            break;
+          case 14: // Trigger a Global Error
+            try {
+              // Trigger an error by accessing a non-existing property or method
+              const nonExistentProperty = null.nonExistentMethod();
+            } catch (error) {
+              console.log('An error occurred:', error);
+            }
+            break;
+        }
+      })
+    })
+  
   </script>
 </body>
 
